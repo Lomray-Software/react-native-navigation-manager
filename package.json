@@ -63,7 +63,9 @@
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.2"
+    "vite-tsconfig-paths": "^4.3.1",
+    "vitest": "^1.2.2",
+    "vitest-react-native": "^0.1.5"
   },
   "peerDependencies": {
     "react-native-navigation": ">=7.37.2"
