@@ -86,12 +86,18 @@ class NavigationManager {
    * Listen navigation events
    */
   public listen(): () => void {
-    const unsub1 = Nav.events().registerBottomTabSelectedListener(({ selectedTabIndex }) => {
-      this.tree.bottomTab.tabIndex = selectedTabIndex;
+    const unsubBottomTabs = Nav.events().registerBottomTabSelectedListener(
+      ({ selectedTabIndex }) => {
+        this.tree.bottomTab.tabIndex = selectedTabIndex;
+      },
+    );
+    const unsubModalDismiss = Nav.events().registerModalDismissedListener(({ componentId }) => {
+      void this.dismissModal(componentId);
     });
 
     return () => {
-      unsub1.remove();
+      unsubBottomTabs.remove();
+      unsubModalDismiss.remove();
     };
   }
 
@@ -438,7 +444,18 @@ class NavigationManager {
     // remove modal id from tab modal stack
     modalStack!.get(tabIndex!)!.delete(id);
 
-    await Nav.dismissModal(id);
+    try {
+      await Nav.dismissModal(id);
+    } catch (e) {
+      const errMsg = (e as Error).message;
+
+      // skip, e.g. on ios we can dismiss by swipe down and in this case dismissModal call is redundant
+      if (errMsg.includes('is not a modal')) {
+        return;
+      }
+
+      this.logger(errMsg, LogLevel.warn);
+    }
   }
 
   /**
