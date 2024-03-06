@@ -1,0 +1,71 @@
+{
+  "name": "@lomray/react-native-navigation-manager",
+  "version": "1.0.0",
+  "description": "React native navigation manager for wix react-native-navigation.",
+  "type": "module",
+  "keywords": [
+    "js",
+    "react",
+    "navite",
+    "reactnative",
+    "navigation",
+    "manager"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lomray-Software/react-native-navigation-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lomray-Software/react-native-navigation-manager/issues"
+  },
+  "homepage": "https://github.com/Lomray-Software/react-native-navigation-manager",
+  "author": "Mikhail Yarmaliuk",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w",
+    "release": "npm run build && cd lib && npm publish",
+    "lint:check": "eslint \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
+    "lint:format": "eslint --fix \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
+    "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
+    "test": "vitest run",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.0.3",
+    "@commitlint/config-conventional": "^19.0.3",
+    "@lomray/eslint-config-react": "^5.0.6",
+    "@lomray/prettier-config": "^2.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@testing-library/react": "^14.2.1",
+    "@types/chai": "^4.3.11",
+    "@types/lodash": "^4.14.202",
+    "@types/sinon": "^17.0.3",
+    "@types/sinon-chai": "^3.2.12",
+    "@vitest/coverage-v8": "^1.2.2",
+    "@zerollup/ts-transform-paths": "^1.7.18",
+    "chai": "^4.4.1",
+    "eslint": "^8.57.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
+    "rollup": "^4.10.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-ts": "^3.4.5",
+    "semantic-release": "^21.1.2",
+    "sinon": "^17.0.1",
+    "sinon-chai": "^3.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  },
+  "peerDependencies": {
+    "react-native-navigation": ">=7.37.2"
+  }
+}
