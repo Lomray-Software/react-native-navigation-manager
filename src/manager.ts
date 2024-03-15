@@ -287,6 +287,58 @@ class NavigationManager {
   }
 
   /**
+   * Close screens stack to selected
+   */
+  public async popTo(
+    params: { stackId?: string } & (
+      | { screenName: string }
+      | { screenId: string }
+      | { count: number }
+    ),
+    options?: Options,
+  ): Promise<void> {
+    const targetStackId = params?.stackId ?? this.current.getStackId();
+    let popCount = 0;
+    let index = -1;
+    let popId = '';
+
+    if (!targetStackId) {
+      this.logger('Cannot find stack id to popTo screens.', LogLevel.error);
+
+      return;
+    }
+
+    const stack = this.tree.stack.get(targetStackId);
+
+    if (!stack) {
+      this.logger('Cannot find stack.', LogLevel.error);
+
+      return;
+    }
+
+    if ('screenName' in params) {
+      index = stack.findIndex(({ name }) => name === params.screenName);
+    }
+
+    if ('screenId' in params) {
+      index = stack.findIndex(({ id }) => id === params.screenId);
+    }
+
+    if ('count' in params) {
+      index = stack.length - params.count - 1;
+    }
+
+    popId = stack[index].id;
+    popCount = stack.length - (index + 1);
+
+    const newStack = stack.slice(0, stack.length - popCount);
+
+    this.tree.stack.set(targetStackId, newStack);
+
+    await Nav.popTo(popId, options);
+  }
+
+  /**
    * Close all screens in stack
    */
   public async popToRoot(options?: Options, stackId?: string): Promise<void> {
