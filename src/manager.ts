@@ -617,6 +617,49 @@ class NavigationManager {
       Nav.mergeOptions(stackId, options);
     });
   }
+
+  /**
+   * Update props for initiated screen in stack
+   */
+  public updateProps(
+    params: ({ screenName: string } | { screenId: string }) & { stackId?: string },
+    props: object,
+    callback?: () => void,
+  ): void {
+    const targetStackId = params?.stackId ?? this.current.getStackId();
+    let index = -1;
+    let screenId = '';
+
+    if (!targetStackId) {
+      this.logger('Cannot find stack id to update props.', LogLevel.error);
+
+      return;
+    }
+
+    const stack = this.tree.stack.get(targetStackId);
+
+    if (!stack) {
+      this.logger(`Cannot find stack: ${targetStackId}`, LogLevel.error);
+
+      return;
+    }
+
+    if ('screenName' in params) {
+      index = stack.findIndex(({ name }) => name === params.screenName);
+    }
+
+    if ('screenId' in params) {
+      index = stack.findIndex(({ id }) => id === params.screenId);
+    }
+
+    if (index < 0) {
+      return;
+    }
+
+    screenId = stack[index].id;
+
+    Nav.updateProps(screenId, props, callback);
+  }
 }
 
 export default NavigationManager;
