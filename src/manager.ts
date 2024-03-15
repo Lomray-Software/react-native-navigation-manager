@@ -311,7 +311,7 @@ class NavigationManager {
     const stack = this.tree.stack.get(targetStackId);
 
     if (!stack) {
-      this.logger('Cannot find stack.', LogLevel.error);
+      this.logger(`Cannot find stack: ${targetStackId}`, LogLevel.error);
 
       return;
     }
