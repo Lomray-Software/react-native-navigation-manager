@@ -513,7 +513,11 @@ class NavigationManager {
   /**
    * Get navigation screen options
    */
-  private getScreenOptions(component: NavigationComponent, defaultOptions: Options = {}): Options {
+  private getScreenOptions(
+    component: NavigationComponent,
+    defaultOptions: Options = {},
+    props: Record<string, any> = {},
+  ): Options {
     const pickDefaultOptions = [
       'topBar.background.color',
       'topBar.title.color',
@@ -529,7 +533,8 @@ class NavigationManager {
     const options =
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      typeof component.options === 'function' ? component.options({}) : component.options;
+      typeof component.options === 'function' ? component.options(props) : component.options;
+
     const allowedOptions = _.pick(options, ['topBar', 'bottomTab']);
     const pickDefaultNavOptions = _.pick(defaultOptions, pickDefaultOptions);
 
@@ -583,13 +588,20 @@ class NavigationManager {
           return;
         }
 
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const reactInternals = wrappedComponent?.['_reactInternals'];
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const component = wrappedComponent?.['_reactInternals']?.type as NavigationComponent;
+        const component = reactInternals?.type as NavigationComponent;
+        const componentProps =
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          reactInternals?.stateNode?.state?.allProps as {
+            componentId: string;
+            rootTag: number;
+          } & Record<string, any>;
 
         stackOptions[stackId] = NavigationManager.mergeScreenOptions(
           stackOptions[stackId] ?? {},
-          this.getScreenOptions(component, defaultOptions),
+          this.getScreenOptions(component, defaultOptions, componentProps),
         );
 
         Nav.mergeOptions(componentId, stackOptions[stackId]);
