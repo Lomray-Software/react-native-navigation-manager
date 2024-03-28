@@ -14,7 +14,14 @@ import { Navigation as Nav } from 'react-native-navigation';
 import LogLevel from '@constants/log-level';
 import pushModal from '@helpers/push-modal';
 import pushScreen from '@helpers/push-screen';
-import type { INavigationManagerOptions, IStoreId, ITree } from '@interfaces/index';
+import type {
+  IModalParams,
+  INavigationManagerOptions,
+  IOverlayParams,
+  IPushParams,
+  IStoreId,
+  ITree,
+} from '@interfaces/index';
 
 class NavigationManager {
   /**
@@ -238,6 +245,16 @@ class NavigationManager {
   }
 
   /**
+   * Check if screen exist in stack
+   */
+  private isExistInStack(layout: Layout, targetStackId: string): boolean {
+    return Boolean(
+      layout?.component?.id &&
+        this.tree.stack.get(targetStackId)?.some(({ id }) => id === layout.component?.id),
+    );
+  }
+
+  /**
    * Set current navigation root layout
    */
   public async setRoot(layout: LayoutRoot): Promise<void> {
@@ -255,12 +272,18 @@ class NavigationManager {
   /**
    * Push new screen to stack
    */
-  public async push(layout: Layout, stackId?: string): Promise<void> {
+  public async push(layout: Layout, stackId?: string, params: IPushParams = {}): Promise<void> {
+    const { isUnique = false } = params;
     const targetStackId = stackId ?? this.current.getStackId();
 
     if (!targetStackId) {
       this.logger('Cannot find stack id to push screen.', LogLevel.error);
 
+      return;
+    }
+
+    // Don't push unique screens
+    if (isUnique && this.isExistInStack(layout, targetStackId)) {
       return;
     }
 
@@ -408,12 +431,18 @@ class NavigationManager {
   /**
    * Show new overlay
    */
-  public async showOverlay(layout: Layout): Promise<void> {
+  public async showOverlay(layout: Layout, params: IOverlayParams = {}): Promise<void> {
+    const { isUnique = true } = params;
     const { id, stackId } = this.handleLayout(layout);
 
     if (!id) {
       this.logger('Cannot handle layout for provided overlay.', LogLevel.warn);
 
+      return;
+    }
+
+    // Don't push unique overlays
+    if (isUnique && this.tree.overlay.get(id)) {
       return;
     }
 
@@ -453,13 +482,19 @@ class NavigationManager {
   /**
    * Show modal
    */
-  public async showModal(layout: Layout): Promise<void> {
+  public async showModal(layout: Layout, params: IModalParams = {}): Promise<void> {
+    const { isUnique = false } = params;
     const { id, stackId } = this.handleLayout(layout);
     const { tabIndex, modalStack } = this.tree.bottomTab;
 
     if (!id) {
       this.logger('Cannot handle layout for provided modal.', LogLevel.warn);
 
+      return;
+    }
+
+    // Don't push unique modals
+    if (isUnique && this.tree.modal.get(id)) {
       return;
     }
 

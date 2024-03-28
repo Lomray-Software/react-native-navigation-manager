@@ -13,6 +13,7 @@ interface ITree {
     // tabIndex => modalId[]
     modalStack?: Map<number, Set<string>>;
   };
+  // stackId => IComponent[]
   stack: Map<string, IComponent[]>;
   // modalId => stackId
   modal: Map<string, string>;
@@ -30,4 +31,24 @@ interface INavigationManagerOptions {
   logger?: (msg: string, level: LogLevel) => void;
 }
 
-export type { IComponent, ITree, IStoreId, INavigationManagerOptions };
+interface IPushParams {
+  isUnique?: boolean;
+}
+
+interface IOverlayParams {
+  isUnique?: boolean;
+}
+
+interface IModalParams {
+  isUnique?: boolean;
+}
+
+export type {
+  IComponent,
+  ITree,
+  IStoreId,
+  INavigationManagerOptions,
+  IPushParams,
+  IOverlayParams,
+  IModalParams,
+};
