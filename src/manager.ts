@@ -391,6 +391,13 @@ class NavigationManager {
       return;
     }
 
+    /**
+     * Update bottom tabs index if one exists
+     */
+    if (_.has(options, 'bottomTabs.currentTabIndex')) {
+      this.tree.bottomTab.tabIndex = _.get(options, 'bottomTabs.currentTabIndex');
+    }
+
     Nav.mergeOptions(componentId, options);
   }
 
