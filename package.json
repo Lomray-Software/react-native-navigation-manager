@@ -32,7 +32,8 @@
     "lint:format": "eslint --fix \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
     "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
     "test": "vitest run",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:build-tooling": "node scripts/check-build-tooling.test.mjs && node scripts/check-build-tooling.mjs"
   },
   "dependencies": {
     "lodash": "^4.17.21"
@@ -69,5 +70,10 @@
   },
   "peerDependencies": {
     "react-native-navigation": ">=7.37.2"
+  },
+  "overrides": {
+    "rollup-plugin-ts": {
+      "browserslist-generator": "3.0.0"
+    }
   }
 }
