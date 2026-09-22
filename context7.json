@@ -1,0 +1,28 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "react-native-navigation-manager",
+  "description": "JavaScript navigation-tree manager around Wix react-native-navigation.",
+  "branch": "prod",
+  "folders": [],
+  "excludeFolders": [
+    "node_modules",
+    "src",
+    "lib",
+    "example",
+    "__tests__",
+    "__mocks__",
+    "__helpers__",
+    "scripts",
+    ".github"
+  ],
+  "excludeFiles": [
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md"
+  ],
+  "rules": [
+    "Use with Wix react-native-navigation, not React Navigation or Expo Router. Examples target 1.4.1.",
+    "Register screens, establish the root through the manager and retain the disposer returned by listen()."
+  ]
+}
